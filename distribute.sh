@@ -1,17 +1,24 @@
 #!/bin/bash
 # Distribute current environment 
-# Samuel Grant 2024 
-# Source this script to pick up enviroment variables
+# Samuel Grant 2025 
+# Source this script
 
 # 1. Setup
-export ENV_NAME=$CONDA_DEFAULT_ENV # "test_env.v1.0.1" # mu2e_env.v1.0.1" # 
-export ENV_DIR="/exp/mu2e/data/users/sgrant/EAF/env"
-export YMAL_DIR="${ENV_DIR}/yml"
+export ENV_NAME=$CONDA_DEFAULT_ENV 
+if [[ "$CONDA_DEFAULT_ENV" == "base" ]]; then
+    echo "❌ Environment is 'base', please activate the environment that you would like to distribute" 
+    return 1
+else
+    echo "✅ Environment is '${ENV_NAME}'" 
+fi
 
-echo "---> Distribute '${ENV_NAME}'? [y/n]"
+export ENV_DIR="/exp/mu2e/data/users/sgrant/EAF/env"
+export YAML_DIR="${ENV_DIR}/yml"
+
+echo "👋 Distribute '${ENV_NAME}'? [Y/n]:"
 read -r CONTINUE_STR
-if [[ "$CONTINUE_STR" != "y" ]]; then
-    echo "---> Exiting..."
+if [[ "$CONTINUE_STR" != "Y" ]]; then
+    echo "❌ Exiting..."
     return 1
 fi
 
@@ -19,63 +26,56 @@ fi
 source ~/.bash_profile
 mamba activate ${ENV_NAME}
 
-# 2. Create YMAL and timestamp
-export THIS_YMAL="${ENV_DIR}/yml/${ENV_NAME}.yml"
-
-if [[ -f "${THIS_YMAL}" ]]; then 
-    echo "${THIS_YMAL} already exists. Continue? [y/n]"
+# 2. Create YAML and timestamp
+export THIS_YAML="${ENV_DIR}/yml/${ENV_NAME}.yml"
+if [[ -f "${THIS_YAML}" ]]; then 
+    echo "👋 ${THIS_YAML} already exists. Continue? [Y/n]:"
     read -r CONTINUE_STR
-    if [[ "$CONTINUE_STR" != "y" ]]; then
-        echo "---> Exiting..."
+    if [[ "$CONTINUE_STR" != "Y" ]]; then
+        echo "❌ Exiting..."
         return 1
     fi
 fi
 
-mamba env export > ${THIS_YMAL}
+echo "✅ Exporting to YAML..."
+mamba env export > ${THIS_YAML}
 
 # Remove prefix 
-sed '$d' "${THIS_YMAL}" > "tmp"
-
+sed '$d' "${THIS_YAML}" > "tmp"
 # Replace library name line with the GitHub URL
-sed -i 's/- anapytools==\([0-9\.]*\)/- "git+https:\/\/github.com\/Mu2e\/anapytools.git@v\1"/' "tmp"
-
+# sed -i 's/- pyutils==\([0-9\.]*\)/- "git+https:\/\/github.com\/Mu2e\/pyutils.git@v\1"/' "tmp"
+sed -i 's/- pyutils==\([0-9\.]*\)/- "git+https:\/\/github.com\/Mu2e\/pyutils.git"/' "tmp" # just main branch (no version)
 # Overwrite
-mv "tmp" "${THIS_YMAL}"
-
-echo "---> Written '${THIS_YMAL}'"
+mv "tmp" "${THIS_YAML}"
+echo "✅ Written '${THIS_YAML}'"
 
 export TIMESTAMP="${ENV_DIR}/yml/${ENV_NAME}.datetime"
-if [[ -f "${THIS_YMAL}" ]]; then 
+if [[ -f "${TIMESTAMP}" ]]; then 
     rm "${TIMESTAMP}" 
 fi
 date +"%Y-%m-%d_%H-%M-%S" > "${TIMESTAMP}"
-echo "---> Created timestamp '${TIMESTAMP}'"
+echo "✅ Created timestamp '${TIMESTAMP}'"
 
 # 3. Pack environment and copy it to /exp/data
-
-echo "---> Pack '${ENV_NAME}' into '${ENV_DIR}/${ENV_NAME}'..."
-echo "Continue? [y/n]"
-
+echo "👋 Pack '${ENV_NAME}' into '${ENV_DIR}/${ENV_NAME}'? [Y/n]:"
 read -r CONTINUE_STR
-
-if [[ "$CONTINUE_STR" == "y" ]]; then
-    if [[ ! -d ${ENV_DIR}/${ENV_NAME} ]]; then 
-        echo "---> Packing '${ENV_NAME}' into '${ENV_DIR}/tar/${ENV_NAME}.tar.gz'..."
-        conda pack -o "${ENV_DIR}/tar/${ENV_NAME}.tar.gz"
-        echo "Done."
-        echo "---> Extracting '${ENV_DIR}/tar/${ENV_NAME}.tar.gz' into '${ENV_DIR}/${ENV_NAME}'..."
-        mkdir ${ENV_DIR}/${ENV_NAME} 
-        tar -xzf "${ENV_DIR}/tar/${ENV_NAME}.tar.gz" -C "${ENV_DIR}/${ENV_NAME}"
-        echo "Done."
-    else
-        echo "Error: '${ENV_DIR}/${ENV_NAME}' already exists!"
-        echo "---> Exiting..."
-        return 1
-    fi   
-else
-    echo "---> Exiting..."
+if [[ "$CONTINUE_STR" != "Y" ]]; then
+    echo "❌ Exiting..."
     return 1
 fi
 
-echo "---> Completed successfully..."
-echo "Environment is '${ENV_DIR}/${ENV_NAME}' with YMAL file '${THIS_YMAL}'..."
+if [[ -d ${ENV_DIR}/${ENV_NAME} ]]; then 
+    echo "❌ Error: '${ENV_DIR}/${ENV_NAME}' already exists!"
+    return 1
+fi   
+
+echo "✅ Packing '${ENV_NAME}' into '${ENV_DIR}/tar/${ENV_NAME}.tar.gz'..."
+conda pack -o "${ENV_DIR}/tar/${ENV_NAME}.tar.gz"
+chmod 777 "${ENV_DIR}/tar/${ENV_NAME}.tar.gz"
+
+echo "✅ Extracting '${ENV_DIR}/tar/${ENV_NAME}.tar.gz' into '${ENV_DIR}/${ENV_NAME}'..."
+mkdir ${ENV_DIR}/${ENV_NAME} 
+tar -xzf "${ENV_DIR}/tar/${ENV_NAME}.tar.gz" -C "${ENV_DIR}/${ENV_NAME}"
+
+echo "✅ Completed successfully!"
+echo "✅ Environment is '${ENV_DIR}/${ENV_NAME}' with YAML file '${THIS_YAML}'"

@@ -1,103 +1,72 @@
 #!/bin/bash
-# Build mu2e_env 
-# Samuel Grant 2024 
+# Build environment from YAML
+# Samuel Grant 2025 
+# source this script
 
-#############################################################
-# 1. Setup variables 
+echo "👋 Enter new environment name:"
+read -r ENV_NAME
 
-ENV_NAME="" 
-ENV_DIR="" 
+if [[ -z "$ENV_NAME" ]]; then 
+    echo "❌ Please enter environment name" 
+    return 1
+else 
+    echo "✅ Environment name is ${ENV_NAME}"
+fi
 
-# Challenge 1
-echo "Is this a test run? [y/n]"
-read -r TEST_STR
+echo "👋 Enter starting YAML path"
+read -r YAML_FILE
 
-if [[ "${TEST_STR}" != "y" ]]; then
-    # Challenge 2
-    echo "Please type 'mu2e_env' to confirm."
-    read -r CHALLENGE_STR
-    if [[ "${CHALLENGE_STR}" != "mu2e_env" ]]; then
-        echo "---> You entered '${CHALLENGE_STR}'. Exiting..." 
-        exit 1
-    else 
-        ENV_NAME="mu2e_env"
-        ENV_DIR="/exp/mu2e/data/users/sgrant/EAF/env"
-    fi
-elif [[ "${TEST_STR}" != "n" ]]; then
-    echo "---> Running in test mode" 
-    ENV_NAME="test_env"
-    ENV_DIR="/exp/mu2e/data/users/sgrant/EAF/env/teststand"
-else
-    echo "---> Invalid input '${TEST_STR}'. Exiting..."
+if [[ -z "$YAML_FILE" ]]; then 
+    echo "❌ Please enter a path to YAML file" 
+    return 1
+else 
+    echo "✅ YAML is ${YAML_FILE}"
+fi
+
+if [[ ! -f "$YAML_FILE" ]]; then 
+    echo "❌ YAML file does not exist" 
     exit 1
+else 
+    echo "✅ YAML file exists" 
 fi
 
-#############################################################
-# 2. Versioning
+COMMAND="mamba env create -n ${ENV_NAME} -f ${YAML_FILE}" 
 
-# Get most recent version
-LAST_VER=$(ls ${ENV_DIR}/${ENV_NAME}.v* 2>/dev/null | sort -V | tail -n 1)
+echo "👋 Executing command: ${COMMAND}"
+echo "OK? [Y/n]:"
 
-# Read last version
-if [[ -z "$LAST_VER" ]]; then
-    VER_STR="1.0.0"
-    THIS_VER="${ENV_NAME}.v${VER_STR}"
-    echo "---> No latest version found for ${ENV_NAME}..."
-else
-    # Extract the version number 
-    LAST_VER=$(echo "$LAST_VER" | sed -E 's/.*\.v([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
-    echo "---> Latest verion is '${ENV_NAME}.v${LAST_VER}'"
-    IFS='.' read -r MAJOR MINOR PATCH <<< "$LAST_VER"
-    
-    echo "What type of update is this? [major/minor/patch]: "
-    read -r UPDATE_TYPE
-    echo "---> Versioning as '${UPDATE_TYPE}' update"
-    
-    # Increment the version based on user input
-    case "$UPDATE_TYPE" in
-        major)
-            MAJOR=$((MAJOR + 1))
-            MINOR=0
-            patch=0
-            ;;
-        minor)
-            MINOR=$((MINOR + 1))
-            PATCH=0
-            ;;
-        patch)
-            PATCH=$((PATCH + 1))
-            ;;
-        *)
-            echo "---> Invalid update type! Exiting."
-            exit 1
-            ;;
-    esac
-    
-    VER_STR="${MAJOR}.${MINOR}.${PATCH}"
-    THIS_VER="${ENV_NAME}.v${VER_STR}"
-    
+read -r OK
+
+if [[ "$OK" != "Y" ]]; then 
+    echo "❌ Exiting..." 
+    return 1
+else 
+    echo "✅ Building" 
+    $COMMAND
+    echo "✅ Activating"
+    mamba activate ${ENV_NAME}
 fi
 
-echo "---> New build will be '${THIS_VER}'." 
+echo "👋 Add environment variables? [Y/N]:"
+read -r OK
 
-#############################################################
-# 3. Build it
-source ~/.bash_profile
-
-REQ_FILE="${ENV_DIR}/req/${THIS_VER}.txt"
-
-if [[ ! -f "${REQ_FILE}" ]]; then
-    echo "'${REQ_FILE}' not found, exiting..."
+if [[ "$OK" != "Y" ]]; then 
+    echo "❌ Exiting..." 
     exit 1
+else 
+    cp env_vars.sh "${CONDA_PREFIX}/etc/conda/activate.d/"
+    echo "✅ Copied 'env_vars.sh' to ${CONDA_PREFIX}/etc/conda/activate.d/ " 
 fi
 
-# Create environment
-echo "---> Creating '${THIS_VER}' from '${REQ_FILE}'."
-mamba create -q -y -n ${THIS_VER} --file "${REQ_FILE}"
-# Activate 
-echo "---> Activating '${THIS_VER}'."
-mamba activate ${THIS_VER}
-# Install tools
-echo "---> Installing https://github.com/sam-grant/anapytools.git"
-pip install -I git+https://github.com/sam-grant/anapytools.git
-echo "Done."
+echo "👋 Install kernel? [Y/N]:"
+read -r OK
+
+if [[ "$OK" != "Y" ]]; then 
+    echo "❌ Exiting..." 
+    exit 1
+else 
+    . ./install_kernel.sh
+    echo "✅ Installed kernel" 
+fi
+
+echo "✅ Done" 

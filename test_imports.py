@@ -7,9 +7,9 @@ def test_import(package, subpackage=None):
             print(f"from {package} import {subpackage} imported successfully")
         else:
             __import__(package)
-            print(f"{package} imported successfully")
+            print(f"✅ {package} imported successfully")
     except ImportError as e:
-        print(f"Failed to import {package}{' -> ' + subpackage if subpackage else ''}: {e}")
+        print(f"❌ Failed to import {package}{' -> ' + subpackage if subpackage else ''}: {e}")
         sys.exit(1)
 
 # List of basic packages to test
@@ -18,25 +18,33 @@ packages = [
     ("pandas", None),
     ("uproot", None),
     ("scipy", None),
-    ("sklearn", None),  # scikit-learn is imported as "sklearn"
-    ("torch", None),  # pytorch is imported as "torch"
+    ("sklearn", None),  
+    ("torch", None), 
     ("tensorflow", None),
     ("jupyterlab", None),
     ("notebook", None),
     ("statsmodels", None),
     ("awkward", None),
     ("urllib3", None),
-    ("ipykernel", None), # ,
+    ("ipykernel", None), 
     ("vector", None),
     ("plotly", None),
-    ("dash", None) #,
-    # ("condapack", None)  # conda-pack is imported as "condapack"
+    ("dash", None),
+    ("tqdm", None),
+    ("hist", None),
+    ("pyutils", None),
 ]
 
 # List of specific modules
 specific_modules = [
-    ("anapytools.read_data", "DataReader"),
-    ("anapytools.parallelise", "ParallelProcessor")
+    # ("tensorflow.keras", "keras"), ## rootana ONLY!
+    ("pyutils.pyread", "Reader"),
+    ("pyutils.pyimport", "Importer"),
+    ("pyutils.pyprocess", "Processor"),
+    ("pyutils.pyselect", "Select"),
+    ("pyutils.pyvector", "Vector"),
+    ("pyutils.pyprint", "Print"),
+    ("pyutils.pyplot", "Plot")
 ]
 
 # Test each package

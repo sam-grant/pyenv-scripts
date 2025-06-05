@@ -2,6 +2,7 @@
 # python -m ipykernel install --name "$CONDA_DEFAULT_ENV" --prefix="$CONDA_PREFIX" --display-name "mu2e_env"
 
 #!/bin/bash
+
 # Remove any existing kernel first
 jupyter kernelspec remove "$CONDA_DEFAULT_ENV" 2>/dev/null || true
 
@@ -14,7 +15,7 @@ python -m ipykernel install \
 # Replace the hardcoded interpreter with default (set in env_vars.sh) 
 export MU2E_KERNEL="$CONDA_PREFIX/share/jupyter/kernels/$CONDA_DEFAULT_ENV/kernel.json"
 sed -i "s|\"$CONDA_PREFIX/bin/python\"|\"python\"|" "$MU2E_KERNEL"
-echo "Mu2e kernel: ${MU2E_KERNEL}"
+echo "✅ Mu2e kernel: ${MU2E_KERNEL}"
 cat "$MU2E_KERNEL" 
 
 # Remove the original python3 kernel.json if it exists
