@@ -47,14 +47,14 @@ else
     mamba activate ${ENV_NAME}
 fi
 
-echo "👋 Add environment variables? [Y/N]:"
+echo "👋 Copy setup script? [Y/n]:"
 read -r OK
 
 if [[ "$OK" != "Y" ]]; then 
     echo "❌ Exiting..." 
     exit 1
 else 
-    cp env_vars.sh "${CONDA_PREFIX}/etc/conda/activate.d/"
+    . ./add_setup_script.sh 
     echo "✅ Copied 'env_vars.sh' to ${CONDA_PREFIX}/etc/conda/activate.d/ " 
 fi
 
