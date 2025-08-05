@@ -7,17 +7,19 @@ echo "👋 Enter new environment name:"
 read -r ENV_NAME
 
 if [[ -z "$ENV_NAME" ]]; then 
-    echo "❌ Please enter environment name" 
+    echo "❌ Please enter new environment name" 
     return 1
 else 
-    echo "✅ Environment name is ${ENV_NAME}"
+    echo "✅ New environment name is ${ENV_NAME}"
 fi
 
-echo "👋 Enter starting YAML path"
-read -r YAML_FILE
+echo "👋 Enter starting environment name (to build from YAML)"
+read -r YAML_ENV_NAME
+YAML_FILE="/exp/mu2e/data/users/sgrant/EAF/env/yml/${YAML_ENV_NAME}.yml"
 
+echo $YAML_FILE
 if [[ -z "$YAML_FILE" ]]; then 
-    echo "❌ Please enter a path to YAML file" 
+    echo "❌ Please enter a starting environment name" 
     return 1
 else 
     echo "✅ YAML is ${YAML_FILE}"
@@ -55,7 +57,6 @@ if [[ "$OK" != "Y" ]]; then
     exit 1
 else 
     . ./add_setup_script.sh 
-    echo "✅ Copied 'env_vars.sh' to ${CONDA_PREFIX}/etc/conda/activate.d/ " 
 fi
 
 echo "👋 Install kernel? [Y/N]:"

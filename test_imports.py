@@ -32,7 +32,8 @@ packages = [
     ("dash", None),
     ("tqdm", None),
     ("hist", None),
-    ("pyutils", None),
+    ("pyarrow", None),
+    ("pyutils", None)
 ]
 
 # List of specific modules
@@ -44,7 +45,8 @@ specific_modules = [
     ("pyutils.pyselect", "Select"),
     ("pyutils.pyvector", "Vector"),
     ("pyutils.pyprint", "Print"),
-    ("pyutils.pyplot", "Plot")
+    ("pyutils.pyplot", "Plot"),
+    ("pyutils.pydisplay", "Display")
 ]
 
 # Test each package
