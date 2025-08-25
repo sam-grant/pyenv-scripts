@@ -1,0 +1,24 @@
+# Also contains environment patched variable script etc/conda/activate.d/env_vars.sh
+name: ana_v1.1.1
+channels:
+  - conda-forge
+dependencies:
+  - pip
+  - matplotlib
+  - pandas
+  - uproot
+  - scipy
+  - scikit-learn
+  - pytorch
+  - tensorflow
+  - jupyterlab
+  - notebook
+  - statsmodels
+  - awkward
+  - urllib3=1.26.16
+  - ipykernel
+  - conda-pack
+  - htop
+  - vector
+  - pip:
+    - "git+https://github.com/Mu2e/anapytools.git@v2.0.0"
