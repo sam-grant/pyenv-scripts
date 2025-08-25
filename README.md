@@ -2,6 +2,8 @@
 
 Scripts for managing the distributed Mu2e Python environment, `pyenv`. 
 
+`pyenv` change log is [here](CHANGELOG.md).
+
 ```
 ├── deploy-scripts # Scripts for building and distributing the environmentg 
 │   ├── build.sh
