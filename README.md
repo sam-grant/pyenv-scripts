@@ -1,4 +1,4 @@
-# env_scripts
+# pyenv-scripts
 
 Shell scripts for managing the distributed Mu2e Python environment. 
 
