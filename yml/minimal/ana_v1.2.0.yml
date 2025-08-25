@@ -19,6 +19,7 @@ dependencies:
   - urllib3=1.26.16
   - ipykernel
   - conda-pack
+  - fsspec-xrootd
   - htop
   - vector
   - plotly

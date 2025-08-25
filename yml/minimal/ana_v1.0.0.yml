@@ -18,6 +18,7 @@ dependencies:
   - urllib3=1.26.16
   - ipykernel
   - conda-pack
+  - fsspec-xrootd
   - htop
   - pip:
     - "git+https://github.com/Mu2e/anapytools.git@v2.0.0"

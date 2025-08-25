@@ -166,9 +166,11 @@ if [[ "$ENV_NAME" == "base" ]]; then
     return 1
 fi
 
-ENV_DIR="/exp/mu2e/data/users/sgrant/EAF/env"
-YAML_DIR="${ENV_DIR}/yml"
-TAR_DIR="${ENV_DIR}/tar"
+PYENV_DIR="/exp/mu2e/data/users/sgrant/pyenv"
+ENV_DIR="${PYENV_DIR}/env"
+YAML_DIR="${PYENV_DIR}/yml"
+YAML_ALT_DIR="../yml/full"
+TAR_DIR="${PYENV_DIR}/tar"
 
 # Create directories if they don't exist
 for dir in "$ENV_DIR" "$YAML_DIR" "$TAR_DIR"; do
@@ -207,6 +209,7 @@ echo "✅ conda-pack is available"
 # 2. Create YAML and timestamp
 echo "⭐️ Exporting environment"
 THIS_YAML="${YAML_DIR}/${ENV_NAME}.yml"
+THIS_ALT_YAML="${YAML_ALT_DIR}/${ENV_NAME}.yml"
 
 if [[ -f "${THIS_YAML}" ]]; then 
     if ! prompt_continue "👋 ${THIS_YAML} already exists. Overwrite?"; then
@@ -216,7 +219,15 @@ if [[ -f "${THIS_YAML}" ]]; then
     rm -f "${THIS_YAML}"
 fi
 
-echo "📄 Exporting to YAML: ${THIS_YAML}"
+if [[ -f "${THIS_ALT_YAML}" ]]; then 
+    if ! prompt_continue "👋 Alternative ${THIS_ALT_YAML} already exists. Overwrite?"; then
+        return 1
+    fi
+    echo "🗑️  Removing existing ${THIS_ALT_YAML}..."
+    rm -f "${THIS_ALT_YAML}"
+fi
+
+echo "📄 Exporting to YAML: ${THIS_YAML} and ${THIS_ALT_YAML}"
 if ! mamba env export > "${THIS_YAML}"; then
     echo "❌ Failed to export environment to YAML" >&2
     return 1
@@ -237,22 +248,27 @@ if ! mv "${THIS_YAML}.tmp" "${THIS_YAML}"; then
     return 1
 fi
 
-echo "✅ Written YAML: ${THIS_YAML}"
+# Copy to alternative
+cp ${THIS_YAML} ${THIS_ALT_YAML}
+
+echo "✅ Written YAMLs:"
+echo "${THIS_YAML}"
+echo "${THIS_ALT_YAML}"
 
 # Create timestamp file
-TIMESTAMP="${YAML_DIR}/${ENV_NAME}.datetime"
-if [[ -f "${TIMESTAMP}" ]]; then 
-    if ! prompt_continue "👋 ${TIMESTAMP} already exists. Overwrite?"; then
-        return 1
-    fi
-    rm -f "${TIMESTAMP}"
-fi
+# TIMESTAMP="${YAML_DIR}/${ENV_NAME}.datetime"
+# if [[ -f "${TIMESTAMP}" ]]; then 
+#     if ! prompt_continue "👋 ${TIMESTAMP} already exists. Overwrite?"; then
+#         return 1
+#     fi
+#     rm -f "${TIMESTAMP}"
+# fi
 
-if ! date +"%Y-%m-%d_%H-%M-%S" > "${TIMESTAMP}"; then
-    echo "❌ Failed to create timestamp file" >&2
-    return 1
-fi
-echo "✅ Created timestamp: ${TIMESTAMP}"
+# if ! date +"%Y-%m-%d_%H-%M-%S" > "${TIMESTAMP}"; then
+#     echo "❌ Failed to create timestamp file" >&2
+#     return 1
+# fi
+# echo "✅ Created timestamp: ${TIMESTAMP}"
 
 # 3. Pack environment
 echo "⭐️ Packing environment"
@@ -306,7 +322,7 @@ echo "✅ Completed successfully!"
 echo "📁 Environment directory: ${PACKED_DIR}"
 echo "📄 YAML file: ${THIS_YAML}"
 echo "📦 Tar file: ${TAR_FILE}"
-echo "🕐 Timestamp: ${TIMESTAMP}"
+# echo "🕐 Timestamp: ${TIMESTAMP}"
 echo ""
 echo "To use this environment on another system:"
 echo "  1. Copy the YAML file and run: mamba env create -f ${ENV_NAME}.yml"

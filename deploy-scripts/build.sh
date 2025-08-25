@@ -12,8 +12,7 @@ YAML_ENV_NAME=""
 
 show_help() {
     cat << EOF
-Usage: source $0 [-y|--yes] [-n|--name ENV_NAME] [-f|--from YAML_ENV_NAME] [-h|--help]
-       . $0 [-y|--yes] [-n|--name ENV_NAME] [-f|--from YAML_ENV_NAME] [-h|--help]
+Usage: . $0 [-y|--yes] [-n|--name ENV_NAME] [-f|--from YAML_ENV_NAME] [-h|--help]
 
   -y, --yes        Automatically answer 'Y' to all prompts
   -n, --name       Specify new environment name
@@ -21,13 +20,13 @@ Usage: source $0 [-y|--yes] [-n|--name ENV_NAME] [-f|--from YAML_ENV_NAME] [-h|-
   -h, --help       Show this help message
 
 Examples:
-  source $0 -y -n myenv -f template_env
   . $0 -n myenv -f template_env
 
 Note: This script must be sourced, not executed directly.
 EOF
 }
 
+# Parse arguments
 while [[ $# -gt 0 ]]; do
     case $1 in
         -y|--yes)
@@ -141,14 +140,14 @@ if [[ -z "$YAML_ENV_NAME" ]]; then
     return 1
 fi
 
-YAML_FILE="/exp/mu2e/data/users/sgrant/EAF/env/yml/${YAML_ENV_NAME}.yml"
+YAML_FILE="../yml/full/${YAML_ENV_NAME}.yml"
 echo "✅ YAML file path: ${YAML_FILE}"
 
 # Check if YAML file exists
 if [[ ! -f "$YAML_FILE" ]]; then 
     echo "❌ YAML file doesn't exist: $YAML_FILE" >&2
     echo "Available YAML files:" >&2
-    ls -la "/exp/mu2e/data/users/sgrant/EAF/env/yml/"*.yml 2>/dev/null || echo "No YAML files found in directory" >&2
+    ls -la "../yml/full/"*.yml 2>/dev/null || echo "No YAML files found in directory" >&2
     return 1
 fi
 echo "✅ YAML file exists"
@@ -189,28 +188,56 @@ fi
 # Copy setup script
 echo "⭐️ Additional setup"
 if prompt_continue "👋 Copy setup script?"; then
-    if [[ -f "./add_setup_script.sh" ]]; then
-        echo "🔧 Running setup script..."
-        if ! . ./add_setup_script.sh; then
-            echo "⚠️  Setup script failed, but continuing..." >&2
-        fi
+    SCRIPT="../internal-scripts/setup-mu2e-python-env.sh"
+    DESTINATION="${CONDA_PREFIX}/etc/conda/activate.d/"
+    
+    # Check if source script exists
+    if [[ ! -f "$SCRIPT" ]]; then
+        echo "❌ Setup script not found: $SCRIPT" >&2
+        return 1
+    fi
+    
+    # Check if destination directory exists, create if needed
+    if [[ ! -d "$DESTINATION" ]]; then
+        echo "📁 Creating destination directory: $DESTINATION"
+        mkdir -p "$DESTINATION"
+    fi
+    
+    # Copy the script
+    if cp "$SCRIPT" "$DESTINATION"; then
+        echo "✅ Copied setup script to conda activate.d"
     else
-        echo "⚠️  add_setup_script.sh not found, skipping..."
+        echo "❌ Failed to copy setup script" >&2
+        return 1
     fi
 fi
 
 # Install kernel
 if prompt_continue "👋 Install kernel?"; then
-    if [[ -f "./install_kernel.sh" ]]; then
-        echo "🔧 Installing kernel..."
-        if ! . ./install_kernel.sh; then
-            echo "⚠️  Kernel installation failed, but continuing..." >&2
-        else
-            echo "✅ Installed kernel"
-        fi
-    else
-        echo "⚠️  install_kernel.sh not found, skipping..."
+    echo "🔧 Installing kernel..."
+    
+    # Remove any existing kernel first
+    jupyter kernelspec remove "$CONDA_DEFAULT_ENV" 2>/dev/null || true
+    
+    # Install new kernel
+    if ! python -m ipykernel install --name "$CONDA_DEFAULT_ENV" --prefix="$CONDA_PREFIX" --display-name "mu2e_env"; then
+        echo "❌ Kernel installation failed" >&2
+        return 1
     fi
+    
+    # Configure kernel
+    MU2E_KERNEL="$CONDA_PREFIX/share/jupyter/kernels/$CONDA_DEFAULT_ENV/kernel.json"
+    PYTHON3_KERNEL="$CONDA_PREFIX/share/jupyter/kernels/python3/kernel.json"
+    
+    # Replace hardcoded interpreter path
+    sed -i "s|\"$CONDA_PREFIX/bin/python\"|\"python\"|" "$MU2E_KERNEL"
+    
+    # Setup python3 symlink
+    [[ -f "$PYTHON3_KERNEL" ]] && rm "$PYTHON3_KERNEL"
+    ln -s "$MU2E_KERNEL" "$PYTHON3_KERNEL"
+    
+    echo "✅ Installed and configured kernel: $MU2E_KERNEL"
+    cat "$MU2E_KERNEL"
 fi
 
 echo ""
