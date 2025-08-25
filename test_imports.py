@@ -33,6 +33,8 @@ packages = [
     ("tqdm", None),
     ("hist", None),
     ("pyarrow", None),
+    ("zfit", None),
+    ("hepstats", None),
     ("pyutils", None)
 ]
 

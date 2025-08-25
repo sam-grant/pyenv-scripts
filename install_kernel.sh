@@ -1,6 +1,3 @@
-# #!/bin/bash
-# python -m ipykernel install --name "$CONDA_DEFAULT_ENV" --prefix="$CONDA_PREFIX" --display-name "mu2e_env"
-
 #!/bin/bash
 
 # Remove any existing kernel first
