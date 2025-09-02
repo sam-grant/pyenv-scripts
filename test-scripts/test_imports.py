@@ -48,7 +48,8 @@ specific_modules = [
     ("pyutils.pyvector", "Vector"),
     ("pyutils.pyprint", "Print"),
     ("pyutils.pyplot", "Plot"),
-    ("pyutils.pydisplay", "Display")
+    ("pyutils.pydisplay", "Display"),
+    ("pyutils.pycut", "CutManager")
 ]
 
 # Test each package
