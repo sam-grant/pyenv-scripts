@@ -35,6 +35,7 @@ packages = [
     ("pyarrow", None),
     ("zfit", None),
     ("hepstats", None),
+    ("xgboost", None),
     ("pyutils", None)
 ]
 
