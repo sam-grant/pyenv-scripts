@@ -140,14 +140,14 @@ if [[ -z "$YAML_ENV_NAME" ]]; then
     return 1
 fi
 
-YAML_FILE="../yml/full/${YAML_ENV_NAME}.yml"
+YAML_FILE="../yml/minimal/${YAML_ENV_NAME}.yml"
 echo "✅ YAML file path: ${YAML_FILE}"
 
 # Check if YAML file exists
 if [[ ! -f "$YAML_FILE" ]]; then 
     echo "❌ YAML file doesn't exist: $YAML_FILE" >&2
     echo "Available YAML files:" >&2
-    ls -la "../yml/full/"*.yml 2>/dev/null || echo "No YAML files found in directory" >&2
+    ls -la "../yml/minimal/"*.yml 2>/dev/null || echo "No YAML files found in directory" >&2
     return 1
 fi
 echo "✅ YAML file exists"
