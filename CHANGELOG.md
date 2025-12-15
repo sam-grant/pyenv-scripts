@@ -4,38 +4,55 @@ All notable changes to the Mu2e Python environments will be documented in this f
 
 ## ana
 
-### 2.2.0 (current)
+### 2.4.0 (current)
+* Installed XGBoost (gradient boosted decision tree library)
+
+**Packages YAML:**
+```
+# Contains environment variable script etc/conda/activate.d/setup_mu2e_python_env.sh, and
+# interactive kernel (with internal symlinks) share/jupyter/kernels
+name: ana_v2.4.0
+channels:
+  - conda-forge
+dependencies:
+  - pip
+  - matplotlib
+  - pandas
+  - uproot
+  - scipy
+  - scikit-learn
+  - pytorch
+  - tensorflow
+  - jupyterlab
+  - notebook
+  - statsmodels
+  - awkward
+  - urllib3=1.26.16
+  - ipykernel
+  - conda-pack
+  - fsspec-xrootd
+  - htop
+  - vector
+  - plotly
+  - dash
+  - tqdm
+  - hist
+  - tmux
+  - pyarrow
+  - zfit
+  - hepstats
+  - xgboost
+  - pip:
+    - "git+https://github.com/Mu2e/pyutils.git"
+```
+
+### 2.3.0
+* Installed zfit
+* Installed hepstats
+
+### 2.2.0
 * Installed pyutils v1.4.0
 * Installed pyarrow for nested array persistence (parquet files)
-
-**Packages:**
-```
-pip
-matplotlib
-pandas
-uproot
-scipy
-scikit-learn
-pytorch
-tensorflow
-jupyterlab
-notebook
-statsmodels
-awkward
-urllib3=1.26.16
-ipykernel
-conda-pack
-fsspec-xrootd
-htop
-vector
-plotly
-dash
-tqdm
-hist
-tmux
-pyarrow
-pyutils # v01_04_00
-```
 
 ### 2.1.0
 * Includes pyutils v1.2.0 with patches from PR-14, PR-15, and PR-18
@@ -86,7 +103,53 @@ First official version containing packages that mirror predecessor pyana, plus `
 
 ## rootana
 
-### 2.2.0
+### 2.3.0 (current) 
+
+
+* `pyutils_v1.5.0`
+* `zfit` and `hepstats`
+
+**Packages (YAML)**
+
+```
+# Contains nvironment variable script etc/conda/activate.d/setup_mu2e_python_env.sh, and
+# interactive kernel (with internal symlinks) share/jupyter/kernels
+name: rootana_v2.3.0
+channels:
+  - conda-forge
+dependencies:
+  - pip
+  - matplotlib
+  - pandas
+  - uproot
+  - scipy
+  - scikit-learn
+  - pytorch
+  - tensorflow
+  - jupyterlab
+  - notebook
+  - statsmodels
+  - awkward
+  - urllib3=1.26.16
+  - ipykernel
+  - conda-pack
+  - fsspec-xrootd
+  - htop
+  - vector
+  - plotly
+  - dash
+  - tqdm
+  - hist
+  - tmux
+  - pyarrow
+  - root=6.34.1
+  - zfit
+  - hepstats
+  - pip:
+    - "git+https://github.com/Mu2e/pyutils.git"
+```
+
+### 2.2.0 (current)
 Identical to ana 2.2.0, but contains ROOT version 6.34.10.
 
 ### 2.1.0
@@ -105,3 +168,53 @@ Some packages were downgraded for Python 3.11 compatibility. These downgrades we
 
 ### 1.2.0
 Identical to ana 1.2.0, but contains ROOT version 6.32.02.
+
+## trkqual
+
+Specialised environment for `trkqual` development. 
+
+### 1.0.0 (current)
+
+**Packages (YAML)**
+
+```
+# Contains environment variable script etc/conda/activate.d/env_vars.sh, and
+# interactive kernel (with internal symlinks) share/jupyter/kernels
+# Specialised environment for trkqual dev
+name: trkqual_v1.0.0
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - root=6.32.0
+  - tensorflow=2.15
+  - onnx
+  - tf2onnx
+  - pip
+  - matplotlib
+  - pandas
+  - uproot
+  - scipy
+  - scikit-learn
+  - pytorch
+  - tensorflow
+  - jupyterlab
+  - notebook
+  - statsmodels
+  - awkward
+  - urllib3=1.26.16
+  - ipykernel
+  - conda-pack
+  - htop
+  - vector
+  - plotly
+  - dash
+  - tqdm
+  - pyarrow
+  - zfit
+  - hepstats
+  - xgboost
+  - pip:
+    - "git+https://github.com/Mu2e/pyutils.git"
+```
+
