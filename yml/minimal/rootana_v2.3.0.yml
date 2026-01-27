@@ -1,6 +1,6 @@
 # Contains UPGRADED environment variable script etc/conda/activate.d/setup_mu2e_python_env.sh, and
 # interactive kernel (with internal symlinks) share/jupyter/kernels
-name: rootana_v2.2.0
+name: rootana_v2.3.0
 channels:
   - conda-forge
 dependencies:
@@ -28,7 +28,7 @@ dependencies:
   - hist
   - tmux
   - pyarrow
-  - root=6.34.1
+  - root
   - zfit
   - hepstats
   - pip:
