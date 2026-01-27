@@ -4,7 +4,6 @@
 # Distribute a Python environment 
 # Samuel Grant 2025
 #
-# Apologies for the emojis...
 #
 # USAGE: 
 # . distribute.sh -e myenv
@@ -13,6 +12,7 @@
 # or
 # . distribute.sh # if the current active environment is the one to distribute
 
+umask 0022
 
 # Parse command line arguments
 AUTO_YES=false
@@ -20,11 +20,12 @@ PROVIDED_ENV_NAME=""
 
 show_help() {
     cat << EOF
-Usage: source $0 [-y|--yes] [-e|--env ENV_NAME] [-h|--help]
-       . $0 [-y|--yes] [-e|--env ENV_NAME] [-h|--help]
+Usage: source $0 [-y|--yes] [-e|--env ENV_NAME] [-p|--path] [-h|--help]
+       . $0 [-y|--yes] [-e|--env ENV_NAME] [-p|--path] [-h|--help]
 
   -y, --yes        Automatically answer 'Y' to all prompts
   -e, --env        Specify environment name to distribute
+  -p, --path        Specifiy the path to write the environment
   -h, --help       Show this help message
 
 This script will:
@@ -55,9 +56,9 @@ while [[ $# -gt 0 ]]; do
             PROVIDED_ENV_NAME="$2"
             shift 2
             ;;
-        -h|--help)
-            show_help
-            return 0
+        -p|--path)
+            PROVIDED_PATH="$2" 
+            shift 2 
             ;;
         *)
             echo "❌ Unknown option: $1" >&2
@@ -166,11 +167,12 @@ if [[ "$ENV_NAME" == "base" ]]; then
     return 1
 fi
 
-PYENV_DIR="/exp/mu2e/data/users/sgrant/pyenv"
-ENV_DIR="${PYENV_DIR}/env"
-YAML_DIR="${PYENV_DIR}/yml/full"
-# YAML_ALT_DIR="../yml/full"
-TAR_DIR="${PYENV_DIR}/tar"
+PYENV_PATH="${PROVIDED_PATH:-/exp/mu2e/data/users/sgrant/pyenv}"
+echo "✅ Using path: ${PYENV_PATH}"
+
+ENV_DIR="${PYENV_PATH}/env"
+YAML_DIR="${PYENV_PATH}/yml/full"
+TAR_DIR="${PYENV_PATH}/tar"
 
 # Create directories if they don't exist
 for dir in "$ENV_DIR" "$YAML_DIR" "$TAR_DIR"; do
