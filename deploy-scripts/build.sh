@@ -1,4 +1,7 @@
 #!/bin/bash
+# Set umask to allow group and world read
+umask 022
+
 #
 # Build environment from base YAML
 # Samuel Grant 2025
@@ -86,7 +89,7 @@ prompt_continue() {
                 ;;
         esac
     done
-}
+} 
 
 # Function to get input or use provided value
 get_input() {
@@ -178,6 +181,10 @@ if ! $COMMAND; then
 fi
 echo "✅ Environment created successfully"
 
+# Set proper permissions for shared filesystem
+echo "🔐 Setting read permissions for all users..."
+chmod -R a+rX "${CONDA_PREFIX}"
+
 # Activate the environment (this persists in the current shell since we're sourced)
 echo "✅ Activating environment: ${ENV_NAME}"
 if ! conda activate "${ENV_NAME}"; then
@@ -206,6 +213,8 @@ if prompt_continue "👋 Copy setup script?"; then
     # Copy the script
     if cp "$SCRIPT" "$DESTINATION"; then
         echo "✅ Copied setup script to conda activate.d"
+        # Ensure the copied script is readable by all
+        chmod a+r "${DESTINATION}/$(basename $SCRIPT)"
     else
         echo "❌ Failed to copy setup script" >&2
         return 1
