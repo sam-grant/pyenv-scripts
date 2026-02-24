@@ -254,8 +254,10 @@ if ! mv "${THIS_YAML}.tmp" "${THIS_YAML}"; then
     return 1
 fi
 
-# Copy to alternative
-# cp ${THIS_YAML} ${THIS_ALT_YAML}
+# Copy to ../yml/full
+FULL_YAML_DIR="../yml/full"
+cp "${THIS_YAML}" "${FULL_YAML_DIR}/$(basename ${THIS_YAML})"
+echo "✅ Copied YAML to ${FULL_YAML_DIR}/$(basename ${THIS_YAML})"
 
 echo "✅ Written YAML:"
 echo "${THIS_YAML}"
