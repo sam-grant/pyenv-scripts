@@ -34,7 +34,7 @@ See the following sections for more details and usage.
 
 Scripts for building and distributing the environment. 
 
-These must be run conda environment that contains `conda-pack` and `pip`, I always work on EAF for this. 
+These must be run conda environment that contains `conda-pack` and `pip`.
 
 #### `build.sh`
 
