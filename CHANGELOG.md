@@ -426,6 +426,7 @@ dependencies:
   - tensorflow-gpu=2.15
   - py-xgboost-gpu
   - cuda-compat
+  - dask
   - onnx
   - tf2onnx
   - jupyterlab
@@ -450,6 +451,7 @@ dependencies:
     - fsspec-xrootd
     - dash
     - "git+https://github.com/Mu2e/pyutils.git"
+
 ```
 
 ### 1.1.0
