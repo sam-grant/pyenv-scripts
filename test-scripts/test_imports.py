@@ -13,8 +13,10 @@ def test_import(package, subpackage=None):
             exec(f"from {package} import {subpackage}")
             print(f"  ✅ from {package} import {subpackage}")
         else:
-            __import__(package)
-            print(f"  ✅ {package}")
+            mod = __import__(package)
+            version = getattr(mod, '__version__', '')
+            version_str = f" ({version})" if version else ""
+            print(f"  ✅ {package}{version_str}")
     except ImportError as e:
         print(f"  ❌ {package}{' -> ' + subpackage if subpackage else ''}: {e}")
         return False
