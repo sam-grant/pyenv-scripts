@@ -4,7 +4,128 @@ All notable changes to the Mu2e Python environments will be documented in this f
 
 ## ana
 
-### 2.4.0 (current)
+### 2.6.0 (current)
+
+Changes from `2.5.0`:
+
+* CUDA (GPU) support for ML libraries
+* `pyutils-1.8.0`
+* `dask`
+* Switched to `pip install` for HEP-specific libraries
+* Updates to `setup-mu2e-env.sh` for CUDA:
+
+```
+export TF_CPP_MIN_LOG_LEVEL=3
+LD_LIBRARY_PATH=$(echo "$LD_LIBRARY_PATH" | tr ':' '\n' | grep -v "$CONDA_PREFIX" | tr '\n' ':' | sed 's/:$//')
+export LD_LIBRARY_PATH="$CONDA_PREFIX/lib:$LD_LIBRARY_PATH"  
+```
+
+Also included test script for CUDA compatibility: 
+
+```
+(rootana_v2.5.0) [sgrant@jupyter-sgrant test-scripts]$ python test_cuda.py 
+🐍 Python: 3.12.12 | packaged by conda-forge | (main, Jan 26 2026, 23:51:32) [GCC 14.3.0]
+
+🔥 PyTorch: 2.5.1
+  ✅ CUDA: working (v12.4, NVIDIA A100 80GB PCIe MIG 1g.10gb, 1 device(s))
+
+🧠 TensorFlow: 2.20.0
+  ✅ CUDA: working (1 GPU(s))
+
+🚀 XGBoost: 2.1.4
+  ✅ CUDA: working
+```
+
+**Packages (YAML)**
+
+```
+name: ana_v2.6.0
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - pip
+  - matplotlib
+  - pandas
+  - scipy
+  - scikit-learn
+  - pytorch::pytorch
+  - pytorch::torchvision
+  - pytorch::torchaudio
+  - pytorch::pytorch-cuda=12.4
+  - tensorflow-gpu
+  - py-xgboost-gpu
+  - cuda-compat
+  - dask
+  - jupyterlab
+  - notebook
+  - statsmodels
+  - urllib3=1.26.16
+  - ipykernel
+  - conda-pack
+  - htop
+  - tmux
+  - plotly
+  - tqdm
+  - pyarrow
+  - pip:
+    - uproot
+    - awkward
+    - vector
+    - hist
+    - zfit
+    - hepstats
+    - fsspec-xrootd
+    - dash
+    - "git+https://github.com/Mu2e/pyutils.git"
+```
+
+### 2.5.0 
+
+Added `pyutils-1.7.0`.
+
+**Packages YAML:**
+
+```
+name: ana_v2.4.0
+channels:
+  - conda-forge
+dependencies:
+  - pip
+  - matplotlib
+  - pandas
+  - uproot
+  - scipy
+  - scikit-learn
+  - pytorch
+  - tensorflow
+  - jupyterlab
+  - notebook
+  - statsmodels
+  - awkward
+  - urllib3=1.26.16
+  - ipykernel
+  - conda-pack
+  - fsspec-xrootd
+  - htop
+  - vector
+  - plotly
+  - dash
+  - tqdm
+  - hist
+  - tmux
+  - pyarrow
+  - zfit
+  - hepstats
+  - xgboost
+  - pip:
+    - "git+https://github.com/Mu2e/pyutils.git"
+```
+
+
+### 2.4.0 
+
 * Installed XGBoost (gradient boosted decision tree library)
 
 **Packages YAML:**
@@ -103,8 +224,104 @@ First official version containing packages that mirror predecessor pyana, plus `
 
 ## rootana
 
-### 2.3.0 (current) 
+### 2.5.0 (current)
 
+Additions from `2.4.0`:
+
+* CUDA (GPU) support for ML libraries
+* `pyutils-1.8.0`
+* `dask`
+
+**Packages (YAML)**
+
+```
+name: rootana_v2.5.0
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - pip
+  - root
+  - matplotlib
+  - pandas
+  - scipy
+  - scikit-learn
+  - pytorch::pytorch
+  - pytorch::torchvision
+  - pytorch::torchaudio
+  - pytorch::pytorch-cuda=12.4
+  - tensorflow-gpu
+  - py-xgboost-gpu
+  - cuda-compat
+  - dask
+  - jupyterlab
+  - notebook
+  - statsmodels
+  - urllib3=1.26.16
+  - ipykernel
+  - conda-pack
+  - htop
+  - tmux
+  - plotly
+  - tqdm
+  - pyarrow
+  - pip:
+    - uproot
+    - awkward
+    - vector
+    - hist
+    - zfit
+    - hepstats
+    - fsspec-xrootd
+    - dash
+    - "git+https://github.com/Mu2e/pyutils.git"
+```
+
+### 2.4.0 
+
+Identical to `2.3.0`, but with `pyutils-1.6.0`.
+
+**Packages (YAML)**
+
+```
+name: rootana_v2.4.0
+channels:
+  - conda-forge
+dependencies:
+  - pip
+  - matplotlib
+  - pandas
+  - uproot
+  - scipy
+  - scikit-learn
+  - pytorch
+  - tensorflow
+  - jupyterlab
+  - notebook
+  - statsmodels
+  - awkward
+  - urllib3=1.26.16
+  - ipykernel
+  - conda-pack
+  - fsspec-xrootd
+  - htop
+  - vector
+  - plotly
+  - dash
+  - tqdm
+  - hist
+  - tmux
+  - pyarrow
+  - root
+  - zfit
+  - hepstats
+  - xgboost
+  - pip:
+    - "git+https://github.com/Mu2e/pyutils.git"
+```
+
+### 2.3.0 
 
 * `pyutils_v1.5.0`
 * `zfit` and `hepstats`
@@ -149,7 +366,7 @@ dependencies:
     - "git+https://github.com/Mu2e/pyutils.git"
 ```
 
-### 2.2.0 (current)
+### 2.2.0 
 Identical to ana 2.2.0, but contains ROOT version 6.34.10.
 
 ### 2.1.0
@@ -171,9 +388,53 @@ Identical to ana 1.2.0, but contains ROOT version 6.32.02.
 
 ## trkqual
 
-Specialised environment for `trkqual` development. 
+Specialised environment for `trkqual` development. Uses TensorFlow 2.15 + Python 3.11 + ROOT 6.32: a known working combo for thge existing trkqual workflow. ROOT's TMVA `PyKeras` method uses `import tensorflow.keras as keras`, which broke in TF ≥ 2.16 when Keras was split into a standalone package. There is a ROOT PR (#15790) that adds Keras 3 support -- it was merged into ROOT master on Jan 14, 2026, but hasn't shipped in a release yet (ROOT 6.32 doesn't have it).
 
-### 1.0.0 (current)
+### 1.1.0 (current)
+
+Update to `pyutils-1.6.0` and addition of `XGBoost`. 
+
+**Packages (YAML)**
+
+```
+name: trkqual_v1.1.0
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - root=6.32.0
+  - tensorflow=2.15
+  - onnx
+  - tf2onnx
+  - pip
+  - matplotlib
+  - pandas
+  - uproot
+  - scipy
+  - scikit-learn
+  - pytorch
+  - tensorflow
+  - jupyterlab
+  - notebook
+  - statsmodels
+  - awkward
+  - urllib3=1.26.16
+  - ipykernel
+  - conda-pack
+  - htop
+  - vector
+  - plotly
+  - dash
+  - tqdm
+  - pyarrow
+  - zfit
+  - hepstats
+  - xgboost
+  - pip:
+    - "git+https://github.com/Mu2e/pyutils.git"
+```
+
+### 1.0.0 
 
 **Packages (YAML)**
 
@@ -213,7 +474,6 @@ dependencies:
   - pyarrow
   - zfit
   - hepstats
-  - xgboost
   - pip:
     - "git+https://github.com/Mu2e/pyutils.git"
 ```

@@ -13,6 +13,7 @@ Scripts for managing the distributed Mu2e Python environment, `pyenv`.
 ├── internal-scripts # Scripts to be installed in the environment itself
 │   └── setup_mu2e_python_env.sh
 ├── test-scripts # Scripts for testing the environment
+    ├── test_cuda.py 
 │   ├── test_imports.ipynb
 │   └── test_imports.py
 └── yml # Environment YAML files
@@ -117,4 +118,8 @@ Runs imports on packages.
 
 Runs `test_import.py` via interactive kernel. 
 
->**Note:** It is recommended to use `test_imports.ipynb` rather than `test_imports.py` directly, since this automatically tests the interactive element. 
+>**Note:** It is recommended to use `test_imports.ipynb` rather than `test_imports.py` directly, since this automatically tests the interactive element.
+
+#### `test_cuda.py`
+
+Checks CUDA compatibility ML libraries. 
