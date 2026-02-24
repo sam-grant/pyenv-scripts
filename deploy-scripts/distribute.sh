@@ -60,6 +60,10 @@ while [[ $# -gt 0 ]]; do
             PROVIDED_PATH="$2" 
             shift 2 
             ;;
+        -h|--help)
+            show_help
+            return 0
+            ;;
         *)
             echo "❌ Unknown option: $1" >&2
             echo "Use -h or --help for usage information" >&2
