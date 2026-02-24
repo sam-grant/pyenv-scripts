@@ -1,0 +1,45 @@
+name: trkqual_v1.2.0
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - python=3.11
+  - root=6.32.0
+  - pip
+  - matplotlib
+  - pandas
+  - scipy
+  - scikit-learn
+  - pytorch::pytorch
+  - pytorch::torchvision
+  - pytorch::torchaudio
+  - pytorch::pytorch-cuda=12.4
+  - tensorflow-gpu=2.15
+  - py-xgboost-gpu
+  - cuda-compat
+  - dask
+  - onnx
+  - tf2onnx
+  - jupyterlab
+  - notebook
+  - statsmodels
+  - urllib3=1.26.16
+  - ipykernel
+  - conda-pack
+  - htop
+  - tmux
+  - plotly
+  - tqdm
+  - pyarrow
+  - pip:
+    - tensorflow==2.15.*
+    - uproot
+    - awkward
+    - vector
+    - hist
+    - zfit
+    - hepstats
+    - fsspec-xrootd
+    - dash
+    - "git+https://github.com/Mu2e/pyutils.git"

@@ -231,6 +231,9 @@ Additions from `2.4.0`:
 * CUDA (GPU) support for ML libraries
 * `pyutils-1.8.0`
 * `dask`
+* Switched to `pip install` for HEP-specific libraries
+* Updates to `setup-mu2e-env.sh` for CUDA
+
 
 **Packages (YAML)**
 
@@ -390,7 +393,66 @@ Identical to ana 1.2.0, but contains ROOT version 6.32.02.
 
 Specialised environment for `trkqual` development. Uses TensorFlow 2.15 + Python 3.11 + ROOT 6.32: a known working combo for thge existing trkqual workflow. ROOT's TMVA `PyKeras` method uses `import tensorflow.keras as keras`, which broke in TF ≥ 2.16 when Keras was split into a standalone package. There is a ROOT PR (#15790) that adds Keras 3 support -- it was merged into ROOT master on Jan 14, 2026, but hasn't shipped in a release yet (ROOT 6.32 doesn't have it).
 
-### 1.1.0 (current)
+### 1.2.0
+
+* CUDA (GPU) support for ML libraries
+* `pyutils-1.8.0`
+* Switched to `pip install` for HEP-specific libraries
+* `dask`
+* Updates to `setup-mu2e-env.sh` for CUDA
+
+**>Note:** Need to pin TF-2.15 in the `pip` section as well, otherwise it gets bumped. 
+
+**Packages (YAML)**
+
+```
+name: trkqual_v1.2.0
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - python=3.11
+  - root=6.32.0
+  - pip
+  - matplotlib
+  - pandas
+  - scipy
+  - scikit-learn
+  - pytorch::pytorch
+  - pytorch::torchvision
+  - pytorch::torchaudio
+  - pytorch::pytorch-cuda=12.4
+  - tensorflow-gpu=2.15
+  - py-xgboost-gpu
+  - cuda-compat
+  - onnx
+  - tf2onnx
+  - jupyterlab
+  - notebook
+  - statsmodels
+  - urllib3=1.26.16
+  - ipykernel
+  - conda-pack
+  - htop
+  - tmux
+  - plotly
+  - tqdm
+  - pyarrow
+  - pip:
+    - tensorflow==2.15.*
+    - uproot
+    - awkward
+    - vector
+    - hist
+    - zfit
+    - hepstats
+    - fsspec-xrootd
+    - dash
+    - "git+https://github.com/Mu2e/pyutils.git"
+```
+
+### 1.1.0
 
 Update to `pyutils-1.6.0` and addition of `XGBoost`. 
 
