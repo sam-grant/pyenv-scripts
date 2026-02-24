@@ -2,6 +2,11 @@ import sys
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument('--root', action='store_true', help='Include ROOT import checks')
+args = parser.parse_args()
+
 def test_import(package, subpackage=None):
     try:
         if subpackage:
@@ -39,9 +44,9 @@ print()
 
 # --- HEP packages ---
 print("⚛️  HEP packages")
-hep_packages = [
-    "uproot", "awkward", "vector", "hist", "zfit", "hepstats",
-]
+hep_packages = ["uproot", "awkward", "vector", "hist", "zfit", "hepstats"]
+if args.root:
+    hep_packages.insert(0, "ROOT")
 failures += sum(not test_import(p) for p in hep_packages)
 print()
 
