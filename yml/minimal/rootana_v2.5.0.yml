@@ -1,0 +1,43 @@
+# Contains UPGRADED environment variable script etc/conda/activate.d/setup_mu2e_python_env.sh, and
+# interactive kernel (with internal symlinks) share/jupyter/kernels
+name: rootana_v2.5.0
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - pip
+  - root
+  - matplotlib
+  - pandas
+  - scipy
+  - scikit-learn
+  - pytorch::pytorch
+  - pytorch::torchvision
+  - pytorch::torchaudio
+  - pytorch::pytorch-cuda=12.4
+  - tensorflow-gpu
+  - py-xgboost-gpu
+  - cuda-compat
+  - dask
+  - jupyterlab
+  - notebook
+  - statsmodels
+  - urllib3=1.26.16
+  - ipykernel
+  - conda-pack
+  - htop
+  - tmux
+  - plotly
+  - tqdm
+  - pyarrow
+  - pip:
+    - uproot
+    - awkward
+    - vector
+    - hist
+    - zfit
+    - hepstats
+    - fsspec-xrootd
+    - dash
+    - "git+https://github.com/Mu2e/pyutils.git"
