@@ -20,8 +20,10 @@ setup_mu2e_python_env() { # Long & specific name to avoid conflicts
     export QT_QPA_PLATFORM_PLUGIN_PATH="$CONDA_PREFIX/lib/qt6/plugins/platforms"
     export FONTCONFIG_FILE="$CONDA_PREFIX/etc/fonts/fonts.conf"
 
-    # Fix git SSL within conda environment
-    export GIT_SSL_CAINFO="/etc/pki/tls/certs/ca-bundle.crt"
+    ## Fix SSL/CA certs for conda-pack environments
+    export GIT_SSL_CAINFO="$CONDA_PREFIX/ssl/cacert.pem"
+    export SSL_CERT_FILE="$CONDA_PREFIX/ssl/cacert.pem"
+    export CURL_CA_BUNDLE="$CONDA_PREFIX/ssl/cacert.pem"
 
     # Fix terminal info databse
     export TERMINFO="$CONDA_PREFIX/share/terminfo"
