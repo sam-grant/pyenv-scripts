@@ -23,6 +23,7 @@ dependencies:
   - urllib3=1.26.16
   - ipykernel
   - conda-pack
+  - fsspec-xrootd
   - htop
   - tmux
   - plotly
@@ -32,9 +33,8 @@ dependencies:
     - uproot
     - awkward
     - vector
-    - hist
+    - hist[plot]
     - zfit
     - hepstats
-    - fsspec-xrootd
     - dash
     - "git+https://github.com/Mu2e/pyutils.git"
