@@ -23,8 +23,14 @@ setup_mu2e_python_env() { # Long & specific name to avoid conflicts
     # This one is unique to pyroot
     export CONDA_BUILD_SYSROOT="$CONDA_PREFIX/x86_64-conda-linux-gnu/sysroot"
 
+    #
     # For CUDA (GPU support)
+    #
+    
+    # Log levels
     export TF_CPP_MIN_LOG_LEVEL=3
+    export ZFIT_DISABLE_TF_WARNINGS=1
+    # Library paths
     LD_LIBRARY_PATH=$(echo "$LD_LIBRARY_PATH" | tr ':' '\n' | grep -v "$CONDA_PREFIX" | tr '\n' ':' | sed 's/:$//')
     export LD_LIBRARY_PATH="$CONDA_PREFIX/lib:$LD_LIBRARY_PATH"
 }
