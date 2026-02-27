@@ -20,6 +20,9 @@ setup_mu2e_python_env() { # Long & specific name to avoid conflicts
     export QT_QPA_PLATFORM_PLUGIN_PATH="$CONDA_PREFIX/lib/qt6/plugins/platforms"
     export FONTCONFIG_FILE="$CONDA_PREFIX/etc/fonts/fonts.conf"
 
+    # Fix git SSL within conda environment
+    export GIT_SSL_CAINFO="/etc/pki/tls/certs/ca-bundle.crt"
+    
     # This one is unique to pyroot
     export CONDA_BUILD_SYSROOT="$CONDA_PREFIX/x86_64-conda-linux-gnu/sysroot"
 
