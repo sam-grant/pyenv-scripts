@@ -1,6 +1,6 @@
-# pyenv-scripts
+# pyenv
 
-Scripts for managing the distributed Mu2e Python environment, `pyenv`. 
+Scripts for managing the distributed Mu2e Python environment. 
 
 `pyenv` change log is [here](CHANGELOG.md).
 
