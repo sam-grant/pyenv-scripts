@@ -310,6 +310,14 @@ if ! tar -xzf "${TAR_FILE}" -C "${PACKED_DIR}"; then
     return 1
 fi
 
+# Fix hardcoded prefixes from conda-pack
+echo "🔧 Running conda-unpack to fix paths..."
+source "${PACKED_DIR}/bin/activate"
+if ! conda-unpack; then
+    echo "⚠️  conda-unpack failed (environment may still work)" >&2
+fi
+source deactivate 2>/dev/null || true
+
 echo ""
 echo "✅ Completed successfully!"
 echo "📁 Environment directory: ${PACKED_DIR}"

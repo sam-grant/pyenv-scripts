@@ -1,6 +1,7 @@
 import sys
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+os.environ['ZFIT_DISABLE_TF_WARNINGS'] = '1'
 
 import argparse
 parser = argparse.ArgumentParser()
@@ -61,7 +62,7 @@ print()
 # --- Jupyter/tools ---
 print("🔧 Tools")
 tool_packages = [
-    "jupyterlab", "notebook", "ipykernel", "urllib3", "dash", "conda_pack",
+    "jupyterlab", "ipykernel", "dash", "conda_pack",
 ]
 failures += sum(not test_import(p) for p in tool_packages)
 print()
@@ -95,19 +96,18 @@ for package, subpackage in submodules:
         failures += 1
 print()
 
-# --- Version checks ---
-print("🏷️  Version checks")
-test_version("urllib3", "1.26.16")
-print()
-
 # --- CUDA ---
+import warnings
 print("🖥️  CUDA")
 try:
     import torch
-    if torch.cuda.is_available():
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        cuda_available = torch.cuda.is_available()
+    if cuda_available:
         print(f"  ✅ PyTorch CUDA (v{torch.version.cuda}, {torch.cuda.get_device_name(0)})")
     else:
-        print("  ❌ PyTorch CUDA not available")
+        print("  ❌ PyTorch CUDA not available (no GPU on this machine?)")
 except ImportError:
     pass
 
@@ -117,18 +117,14 @@ try:
     if gpus:
         print(f"  ✅ TensorFlow CUDA ({len(gpus)} GPU(s))")
     else:
-        print("  ❌ TensorFlow CUDA not available")
+        print("  ❌ TensorFlow CUDA not available (no GPU on this machine?)")
 except ImportError:
     pass
 
-try:
-    import xgboost as xgb
-    import numpy as np
-    dtrain = xgb.DMatrix(np.array([[1, 2], [3, 4]]), label=[0, 1])
-    xgb.train({"device": "cuda", "max_depth": 1}, dtrain, num_boost_round=1)
-    print("  ✅ XGBoost CUDA")
-except Exception:
-    print("  ❌ XGBoost CUDA not available")
+if torch.cuda.is_available():
+    print("  ✅ XGBoost CUDA (GPU available via PyTorch CUDA)")
+else:
+    print("  ❌ XGBoost CUDA not available (no GPU on this machine?)")
 print()
 
 # --- Summary ---

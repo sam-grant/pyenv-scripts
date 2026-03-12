@@ -59,7 +59,14 @@ e.g.
 
 ```
 
-Once built, one can install new packages and make other changes before distributing. 
+Once built, one can install new packages and make other changes before distributing.
+
+To remove the build environment after distribution and free up some disk space:
+
+```
+mamba env remove -n ana_v1.0.0
+conda clean --all -y
+```
 
 ---
 

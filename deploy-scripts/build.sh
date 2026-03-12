@@ -166,6 +166,14 @@ if mamba env list | grep -q "^${ENV_NAME} "; then
 fi
 
 # Execute mamba command
+
+# GPU notes:
+# Tell solver CUDA is available (build machine may lack GPU drivers).
+# This version must be <= the driver version on EAF GPU nodes.
+# Check driver EAF:  nvidia-smi (look for "CUDA Version" in top-right)
+# Check available: mamba search pytorch-cuda -c pytorch
+
+export CONDA_OVERRIDE_CUDA="12.4"
 echo "⭐️ Building environment"
 COMMAND="mamba env create -n ${ENV_NAME} -f ${YAML_FILE}"
 echo "👋 Executing command: ${COMMAND}"
@@ -218,6 +226,19 @@ if prompt_continue "👋 Copy setup script?"; then
     else
         echo "❌ Failed to copy setup script" >&2
         return 1
+    fi
+fi
+
+# Copy sitecustomize.py (fixes TensorFlow + XRootD SSL conflict)
+SITECUSTOMIZE="../internal-scripts/sitecustomize.py"
+PYTHON_VERSION=$(python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
+SITE_DEST="${CONDA_PREFIX}/lib/python${PYTHON_VERSION}/sitecustomize.py"
+if [[ -f "$SITECUSTOMIZE" ]]; then
+    if cp "$SITECUSTOMIZE" "$SITE_DEST"; then
+        chmod a+r "$SITE_DEST"
+        echo "✅ Copied sitecustomize.py (XRootD SSL fix)"
+    else
+        echo "⚠️  Failed to copy sitecustomize.py" >&2
     fi
 fi
 

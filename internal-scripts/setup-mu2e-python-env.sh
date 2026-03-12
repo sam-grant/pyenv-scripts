@@ -1,5 +1,5 @@
 #!/bin/bash
-# Samuel Grant 2024-2025
+# Samuel Grant 2024
 # Environment setup & protection
 
 # Define environment configuration
@@ -15,8 +15,8 @@ setup_mu2e_python_env() { # Long & specific name to avoid conflicts
     # Clean and set JUPYTER_PATH
     JUPYTER_PATH=$(echo "$JUPYTER_PATH" | tr ':' '\n' | grep -v "$CONDA_PREFIX" | tr '\n' ':' | sed 's/:$//')
     export JUPYTER_PATH="$CONDA_PREFIX/share/jupyter/kernels:$JUPYTER_PATH"
-    
-    # Set other environment variables 
+
+    # Set other environment variables
     export QT_QPA_PLATFORM_PLUGIN_PATH="$CONDA_PREFIX/lib/qt6/plugins/platforms"
     export FONTCONFIG_FILE="$CONDA_PREFIX/etc/fonts/fonts.conf"
 
@@ -25,9 +25,9 @@ setup_mu2e_python_env() { # Long & specific name to avoid conflicts
     export SSL_CERT_FILE="$CONDA_PREFIX/ssl/cacert.pem"
     export CURL_CA_BUNDLE="$CONDA_PREFIX/ssl/cacert.pem"
 
-    # Fix terminal info databse
+    # Fix terminal info database
     export TERMINFO="$CONDA_PREFIX/share/terminfo"
-    
+
     # This one is unique to pyroot
     export CONDA_BUILD_SYSROOT="$CONDA_PREFIX/x86_64-conda-linux-gnu/sysroot"
 

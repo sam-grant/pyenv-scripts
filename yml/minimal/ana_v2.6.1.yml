@@ -1,0 +1,55 @@
+name: ana_v2.6.1
+channels:
+  - pytorch
+  - nvidia
+  # Prefer NVIDIA's CUDA packages over conda-forge's
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pip
+  # Core scientific stack
+  - matplotlib
+  - pandas
+  - scipy
+  - scikit-learn
+  - numpy
+  # ML
+  # PyTorch needs MKL>=2023 (tensorflow-gpu used to pull this in)
+  - mkl>=2023
+  # PyTorch with CUDA 12.4
+  - pytorch::pytorch
+  - pytorch::torchvision
+  - pytorch::pytorch-cuda=12.4
+  # XGBoost (GPU version)
+  - py-xgboost-gpu
+  # Bridges CUDA version mismatches
+  - cuda-compat
+  # Data I/O
+  - dask
+  - pyarrow
+  # Interactive 
+  - jupyterlab
+  - ipykernel
+  # Statistics
+  - statsmodels
+  # DQM
+  - plotly
+  # Utilities
+  - tqdm
+  # System tools
+  - htop
+  - tmux
+  - conda-pack
+  # File access via XRootD
+  - fsspec-xrootd
+  # pip: HEP packages (and zfit installed via pip so it pulls
+  # its own compatible TensorFlow, avoiding CUDA conflicts)
+  - pip:
+    - uproot
+    - awkward
+    - vector
+    - hist[plot]
+    - hepstats
+    - zfit
+    - dash
+    - "git+https://github.com/Mu2e/pyutils.git"
