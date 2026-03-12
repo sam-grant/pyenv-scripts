@@ -14,12 +14,13 @@ dependencies:
   - scikit-learn
   - numpy
   # ML
-  # PyTorch needs MKL>=2023 (tensorflow-gpu used to pull this in)
   - mkl>=2023
   # PyTorch with CUDA 12.4
   - pytorch::pytorch
   - pytorch::torchvision
   - pytorch::pytorch-cuda=12.4
+  # TensorFlow (GPU)
+  - tensorflow-gpu
   # XGBoost (GPU version)
   - py-xgboost-gpu
   # Bridges CUDA version mismatches
@@ -42,8 +43,7 @@ dependencies:
   - conda-pack
   # File access via XRootD
   - fsspec-xrootd
-  # pip: HEP packages (and zfit installed via pip so it pulls
-  # its own compatible TensorFlow, avoiding CUDA conflicts)
+  # pip: HEP packages
   - pip:
     - uproot
     - awkward
