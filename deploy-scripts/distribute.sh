@@ -171,7 +171,7 @@ if [[ "$ENV_NAME" == "base" ]]; then
     return 1
 fi
 
-PYENV_PATH="${PROVIDED_PATH:-/exp/mu2e/data/users/sgrant/pyenv}"
+PYENV_PATH="${PROVIDED_PATH:-/exp/mu2e/data/users/${USER}/pyenv}"
 echo "✅ Using path: ${PYENV_PATH}"
 
 ENV_DIR="${PYENV_PATH}/env"
