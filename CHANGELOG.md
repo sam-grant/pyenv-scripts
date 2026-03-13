@@ -4,7 +4,63 @@ All notable changes to the Mu2e Python environments will be documented in this f
 
 ## ana
 
-### 2.6.0 (current)
+### 2.6.1 (current)
+
+Patch from `2.6.0`:
+
+* Fixed TensorFlow XRootD SSL conflict via `sitecustomize.py` (pre-init XRootD SSL context before TF can interfere)
+* Build script now sets `CONDA_OVERRIDE_CUDA` so environments can build on non-GPU nodes
+* Added `conda-unpack` step to distribution for fixing hardcoded paths in packed environments, good practice
+* Moved `fsspec-xrootd` from pip to conda
+* Removed `notebook` (covered by `jupyterlab`)
+* Removed `urllib3` pin
+* `pyutils` installed from HEAD, which includes Sophie's dask processing module
+
+**Packages (YAML)**
+
+```
+name: ana_v2.6.1
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - pip
+  - matplotlib
+  - pandas
+  - scipy
+  - scikit-learn
+  - numpy
+  - pyarrow
+  - pytorch::pytorch
+  - pytorch::torchvision
+  - pytorch::torchaudio
+  - pytorch::pytorch-cuda=12.4
+  - tensorflow-gpu
+  - py-xgboost-gpu
+  - cuda-compat
+  - dask
+  - jupyterlab
+  - statsmodels
+  - ipykernel
+  - conda-pack
+  - fsspec-xrootd
+  - htop
+  - tmux
+  - plotly
+  - tqdm
+  - pip:
+    - uproot
+    - awkward
+    - vector
+    - hist[plot]
+    - zfit
+    - hepstats
+    - dash
+    - "git+https://github.com/Mu2e/pyutils.git"
+```
+
+### 2.6.0
 
 Changes from `2.5.0`:
 
