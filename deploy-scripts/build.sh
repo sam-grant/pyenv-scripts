@@ -189,16 +189,16 @@ if ! $COMMAND; then
 fi
 echo "✅ Environment created successfully"
 
-# Set proper permissions for shared filesystem
-echo "🔐 Setting read permissions for all users..."
-chmod -R a+rX "${CONDA_PREFIX}"
-
 # Activate the environment (this persists in the current shell since we're sourced)
 echo "✅ Activating environment: ${ENV_NAME}"
 if ! conda activate "${ENV_NAME}"; then
     echo "❌ Failed to activate environment" >&2
     return 1
 fi
+
+# Set proper permissions for shared filesystem (after activation so CONDA_PREFIX is correct)
+echo "🔐 Setting read permissions for all users..."
+chmod -R a+rX "${CONDA_PREFIX}"
 
 # Copy setup script
 echo "⭐️ Additional setup"
