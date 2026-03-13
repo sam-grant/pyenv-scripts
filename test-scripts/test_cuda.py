@@ -4,18 +4,6 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 print(f"🐍 Python: {sys.version}\n")
 
-# PyTorch
-try:
-    import torch
-    print(f"🔥 PyTorch: {torch.__version__}")
-    if torch.cuda.is_available():
-        print(f"  ✅ CUDA: working (v{torch.version.cuda}, {torch.cuda.get_device_name(0)}, {torch.cuda.device_count()} device(s))")
-    else:
-        print("  ❌ CUDA: not available")
-except ImportError:
-    print("🔥 PyTorch: not installed")
-print()
-
 # TensorFlow
 try:
     import tensorflow as tf
@@ -27,6 +15,18 @@ try:
         print("  ❌ CUDA: not available")
 except ImportError:
     print("🧠 TensorFlow: not installed")
+print()
+
+# PyTorch
+try:
+    import torch
+    print(f"🔥 PyTorch: {torch.__version__}")
+    if torch.cuda.is_available():
+        print(f"  ✅ CUDA: working (v{torch.version.cuda}, {torch.cuda.get_device_name(0)}, {torch.cuda.device_count()} device(s))")
+    else:
+        print("  ❌ CUDA: not available")
+except ImportError:
+    print("🔥 PyTorch: not installed")
 print()
 
 # XGBoost
